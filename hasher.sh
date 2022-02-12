@@ -362,7 +362,7 @@ elif [[ $mode == "check" ]]; then
 	fi
 elif [[ $mode == "help" ]]; then
 	echo "hasher version 0.2"
-	echo "./hasher.sh [mode] [directory] [options]"
+	echo "./hasher.sh [options]"
 	echo ""
 	echo "  options:"
 	echo "    --mode=(create, check, help) what mode to run hasher in"
