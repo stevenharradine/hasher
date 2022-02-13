@@ -11,6 +11,7 @@ findArgs=""
 enable_md5=true
 enable_sha1=true
 enable_sha256=true
+findMissing=false
 fileCounter=0
 
 # parse arguments passed into hasher
@@ -28,6 +29,8 @@ for arg in "$@"; do
 		enable_sha1=$value
 	elif [[ $key == "--enable-sha256" ]]; then
 		enable_sha256=$value
+	elif [[ $key == "--find-missing" ]]; then
+		findMissing=$value
 	elif [[ $key == "--update" ]]; then
 		mode="update"
 	elif [[ $key == "--help" ]] || [[ $key == "-?" ]] || [[ $key == "-h" ]]; then
@@ -239,15 +242,17 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_md5 == true ]; then
 				md5Filename="$nestedPath".md5
 				if [ -f "$md5Filename" ]; then
-					md5Contents=`cat "$md5Filename"`
-					md5Sum=`md5sum "$nestedPath" | cut -d " " -f1`
-					if [ "$md5Contents" == "$md5Sum" ]; then
-						echo -n "✓) "
-						((md5Good++))
-					else
-						echo -n "X) "
-						((md5Bad++))
-						md5HasError=true
+					if [ $findMissing == false ]; then
+						md5Contents=`cat "$md5Filename"`
+						md5Sum=`md5sum "$nestedPath" | cut -d " " -f1`
+						if [ "$md5Contents" == "$md5Sum" ]; then
+							echo -n "✓) "
+							((md5Good++))
+						else
+							echo -n "X) "
+							((md5Bad++))
+							md5HasError=true
+						fi
 					fi
 				else
 					echo -n "?) "
@@ -263,15 +268,17 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_sha1 == true ]; then
 				sha1Filename="$nestedPath".sha1
 				if [ -f "$sha1Filename" ]; then
-					sha1Contents=`cat "$sha1Filename"`
-					sha1Sum=`sha1sum "$nestedPath" | cut -d " " -f1`
-					if [ "$sha1Contents" == "$sha1Sum" ]; then
-						echo -n "✓) "
-						((sha1Good++))
-					else
-						echo -n "X) "
-						((sha1Bad++))
-						sha1HasError=true
+					if [ $findMissing == false ]; then
+						sha1Contents=`cat "$sha1Filename"`
+						sha1Sum=`sha1sum "$nestedPath" | cut -d " " -f1`
+						if [ "$sha1Contents" == "$sha1Sum" ]; then
+							echo -n "✓) "
+							((sha1Good++))
+						else
+							echo -n "X) "
+							((sha1Bad++))
+							sha1HasError=true
+						fi
 					fi
 				else
 					echo -n "?) "
@@ -287,15 +294,17 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_sha256 == true ]; then
 				sha256Filename="$nestedPath".sha256
 				if [ -f "$sha256Filename" ]; then
-					sha256Contents=`cat "$sha256Filename"`
-					sha256Sum=`sha256sum "$nestedPath" | cut -d " " -f1`
-					if [ "$sha256Contents" == "$sha256Sum" ]; then
-						echo -n "✓) "
-						((sha256Good++))
-					else
-						echo -n "X) "
-						((sha256Bad++))
-						sha256HasError=true
+					if [ $findMissing == false ]; then
+						sha256Contents=`cat "$sha256Filename"`
+						sha256Sum=`sha256sum "$nestedPath" | cut -d " " -f1`
+						if [ "$sha256Contents" == "$sha256Sum" ]; then
+							echo -n "✓) "
+							((sha256Good++))
+						else
+							echo -n "X) "
+							((sha256Bad++))
+							sha256HasError=true
+						fi
 					fi
 				else
 					echo -n "?) "
@@ -354,7 +363,7 @@ elif [[ $mode == "check" ]]; then
 	echo "sha256 Skipped(s): $sha256Skipped"
 	echo ""
 
-	bad=$(($md5Bad + $sha1Bad + $sha256Bad))
+	bad=$(($md5Bad + $sha1Bad + $sha256Bad + md5Missing + sha1Missing + sha256Missing))
 
 	if [ "$bad" -eq "0" ]; then
 		echo "  ** All good **"
