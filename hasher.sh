@@ -363,13 +363,11 @@ elif [[ $mode == "check" ]]; then
 		echo -e "$error_log"
 	fi
 elif [[ $mode == "update" ]]; then
-	filename=${BASH_SOURCE}
 	fullpath=$(readlink -f "${BASH_SOURCE}")
-	num=${#filename}
-	((++num))
-	installDir=${fullpath:0:-$num}
+	installDir=${fullpath%/*}
+	filename=${fullpath:$(( ${#installDir} + 1 )):${#fullpath}}
 
-	echo "Updating $fullpath :"
+	echo "Updating $installDir/$filename:"
 	curl https://raw.githubusercontent.com/stevenharradine/bashInstaller/master/installer.sh | bash -s "installDir=$installDir" program=hasher
 elif [[ $mode == "help" ]]; then
 	echo "hasher version 0.2"
