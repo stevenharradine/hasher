@@ -242,7 +242,7 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_md5 == true ]; then
 				md5Filename="$nestedPath".md5
 				if [ -f "$md5Filename" ]; then
-					if [ $findMissing == false ]; then
+					if [ "$findMissing" == "false" ]; then
 						md5Contents=`cat "$md5Filename"`
 						md5Sum=`md5sum "$nestedPath" | cut -d " " -f1`
 						if [ "$md5Contents" == "$md5Sum" ]; then
@@ -268,7 +268,7 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_sha1 == true ]; then
 				sha1Filename="$nestedPath".sha1
 				if [ -f "$sha1Filename" ]; then
-					if [ $findMissing == false ]; then
+					if [ "$findMissing" == "false" ]; then
 						sha1Contents=`cat "$sha1Filename"`
 						sha1Sum=`sha1sum "$nestedPath" | cut -d " " -f1`
 						if [ "$sha1Contents" == "$sha1Sum" ]; then
@@ -294,7 +294,7 @@ elif [[ $mode == "check" ]]; then
 			if [ $enable_sha256 == true ]; then
 				sha256Filename="$nestedPath".sha256
 				if [ -f "$sha256Filename" ]; then
-					if [ $findMissing == false ]; then
+					if [ "$findMissing" == "false" ]; then
 						sha256Contents=`cat "$sha256Filename"`
 						sha256Sum=`sha256sum "$nestedPath" | cut -d " " -f1`
 						if [ "$sha256Contents" == "$sha256Sum" ]; then
@@ -388,6 +388,8 @@ elif [[ $mode == "help" ]]; then
 	echo "    --enable-md5={true|false}"
 	echo "    --enable-sha1={true|false}"
 	echo "    --enable-sha256={true|false}"
+	echo "    --find-missing={true|false}, do not scan the files but just look for missing hashes"
+	echo "    --update, update this program with the lastest version from git"
 	echo "    --help, -h, -? Will enable this help window"
 	echo ""
 	echo "usage: ./hasher.sh --mode=create --directory=/home/pi/videos --enable-md5=false"
