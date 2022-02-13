@@ -28,6 +28,8 @@ for arg in "$@"; do
 		enable_sha1=$value
 	elif [[ $key == "--enable-sha256" ]]; then
 		enable_sha256=$value
+	elif [[ $key == "--update" ]]; then
+		mode="update"
 	elif [[ $key == "--help" ]] || [[ $key == "-?" ]] || [[ $key == "-h" ]]; then
 		mode="help"
 	fi
@@ -360,6 +362,15 @@ elif [[ $mode == "check" ]]; then
 		echo "  !!! Some errors should investigate !!!"
 		echo -e "$error_log"
 	fi
+elif [[ $mode == "update" ]]; then
+	filename=${BASH_SOURCE}
+	fullpath=$(readlink -f "${BASH_SOURCE}")
+	num=${#filename}
+	((++num))
+	installDir=${fullpath:0:-$num}
+
+	echo "Updating $fullpath :"
+	curl https://raw.githubusercontent.com/stevenharradine/bashInstaller/master/installer.sh | bash -s "installDir=$installDir" program=hasher
 elif [[ $mode == "help" ]]; then
 	echo "hasher version 0.2"
 	echo "./hasher.sh [options]"
