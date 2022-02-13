@@ -318,7 +318,7 @@ elif [[ $mode == "check" ]]; then
 
 			echo "| done"
 
-			if [ $md5HasError ] || [ $sha1HasError ] || [ $sha256HasError ]; then
+			if [ $md5HasError == "true" ] || [ $sha1HasError == "true" ] || [ $sha256HasError == "true" ]; then
 				error_log="$error_log$nestedPath\n"
 			fi
 
