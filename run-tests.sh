@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright Steven Harradine 2022
 number_of_tests=0
 number_of_tests_passed=0
 number_of_tests_failed=0

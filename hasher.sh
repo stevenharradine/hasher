@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright Steven Harradine 2022
+HASHER_VERSION=0.3
 mode=help
 dir="./"
 filetypes_videos=(avi mkv mp4 ts mts m2ts mpg mpeg wmv wv flv webm vob ogv ogg rm asf)
@@ -379,11 +381,11 @@ elif [[ $mode == "update" ]]; then
 	echo "Updating $installDir/$filename:"
 	curl https://raw.githubusercontent.com/stevenharradine/bashInstaller/master/installer.sh | bash -s "installDir=$installDir" program=hasher
 elif [[ $mode == "help" ]]; then
-	echo "hasher version 0.2"
+	echo "hasher version $HASHER_VERSION"
 	echo "./hasher.sh [options]"
 	echo ""
 	echo "  options:"
-	echo "    --mode=(create, check, help) what mode to run hasher in"
+	echo "    --mode=(create, check) what mode to run hasher in"
 	echo "    --directory=the directory you want hasher to run against"
 	echo "    --enable-md5={true|false}"
 	echo "    --enable-sha1={true|false}"
