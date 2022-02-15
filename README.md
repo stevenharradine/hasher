@@ -19,3 +19,9 @@ hasher version 0.2
     --help, -h, -? Will enable this help window
 
 usage: ./hasher.sh --mode=create --directory=/home/pi/videos --enable-md5=false
+
+## Tests
+### To run the test suite
+./run-tests.sh
+### new tests
+add new tests to the tests folder, use test-template.sh as an example
