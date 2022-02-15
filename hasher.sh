@@ -3,7 +3,7 @@
 HASHER_VERSION=0.3
 mode=help
 dir="./"
-filetypes_videos=(avi mkv mp4 ts mts m2ts mpg mpeg wmv wv flv webm vob ogv ogg rm asf)
+filetypes_videos=(avi mkv mp4 ts mts m2ts mpg mpeg wmv wv flv webm vob ogv ogg rm asf wtv mov)
 filetypes_images=(jpeg jpg gif bmp svg)
 filetypes_audio=(mp3 flac wav)
 filetypes_documents=(txt doc docx pdf xls odf xlsx)
