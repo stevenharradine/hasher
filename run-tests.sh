@@ -2,7 +2,7 @@
 # Copyright Steven Harradine 2022
 number_of_tests=0
 number_of_tests_passed=0
-number_of_tests_failed=0
+number_of_tests_failed=1
 
 while read script ; do
 	mkdir -p tests/workspace
@@ -26,4 +26,5 @@ if [ $number_of_tests_failed -eq 0 ]; then
 	echo "Passed"
 else
 	echo "Failed"
+	exit -1
 fi
