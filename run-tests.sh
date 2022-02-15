@@ -2,7 +2,7 @@
 # Copyright Steven Harradine 2022
 number_of_tests=0
 number_of_tests_passed=0
-number_of_tests_failed=1
+number_of_tests_failed=0
 
 while read script ; do
 	mkdir -p tests/workspace
