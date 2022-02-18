@@ -1,7 +1,7 @@
 echo -n "Help functionality . "
 
 # Set up workspace
-echo "file1" > tests/workspace/file1.avi
+# none needed
 
 # Run the program
 results1=`bash hasher.sh --help`
