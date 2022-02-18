@@ -3,14 +3,15 @@
 number_of_tests=0
 number_of_tests_passed=0
 number_of_tests_failed=0
+workspace_directory=tests/workspace
 
 while read script ; do
-	mkdir -p tests/workspace
+	mkdir -p "$workspace_directory"
 
 	source $script
 	((++number_of_tests))
 
-	rm -r tests/workspace
+	rm -r "$workspace_directory"
 done <<< "$(eval "find tests/ -type f ! -name \"test-template.sh\" -name \"*.sh\"" | sort -t '\0' -n)"
 
 echo ""
