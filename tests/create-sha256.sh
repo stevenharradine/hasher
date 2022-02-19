@@ -1,5 +1,3 @@
-echo -n "Create proper sha256 hash . "
-
 # Set up workspace
 echo "file1" > tests/workspace/file1.avi
 

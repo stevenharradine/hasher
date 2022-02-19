@@ -1,5 +1,3 @@
-echo -n "Help functionality . "
-
 # Set up workspace
 # none needed
 
@@ -14,8 +12,6 @@ if [[ $results1 == *$keyText* ]] &&
    [[ $results2 == *$keyText* ]] &&
    [[ $results3 == *$keyText* ]]; then
 	echo "Pass"
-	((++number_of_tests_passed))
 else
 	echo "Fail"
-	((++number_of_tests_failed))
 fi

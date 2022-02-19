@@ -8,7 +8,19 @@ workspace_directory=tests/workspace
 while read script ; do
 	mkdir -p "$workspace_directory"
 
-	source $script
+	result=`source $script`
+	title=${script:6:-3}												# remove tests/ and .sh
+	title=`echo $title | sed 's/-/ /g'`									# dashes to spaces
+	title="$(tr '[:lower:]' '[:upper:]' <<< ${title:0:1})${title:1}"	# upper case first char
+
+	echo "$title . $result"
+	
+	if [ "$result" == "Pass" ]; then
+		((++number_of_tests_passed))
+	elif [ "$result" == "Fail" ]; then
+		((++number_of_tests_failed))
+	fi
+
 	((++number_of_tests))
 
 	rm -r "$workspace_directory"
