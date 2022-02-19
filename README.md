@@ -5,8 +5,7 @@ Hasher will create a new hash file along side your existing files you want to pr
 curl https://raw.githubusercontent.com/stevenharradine/bashInstaller/master/installer.sh | bash -s program=hasher
 
 ## using hasher
-hasher version 0.2
-./hasher.sh [mode] [directory] [options]
+./hasher.sh [options]
 
   options:
     --mode=(create, check, help) what mode to run hasher in
