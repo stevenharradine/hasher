@@ -15,6 +15,10 @@ enable_sha1=true
 enable_sha256=true
 findMissing=false
 fileCounter=0
+enable_advanced_display=false
+
+## only if the session is interactive will we use the advanced displays
+tty -s && enable_advanced_display=true
 
 # parse arguments passed into hasher
 for arg in "$@"; do
@@ -33,6 +37,8 @@ for arg in "$@"; do
 		enable_sha256=$value
 	elif [[ $key == "--find-missing" ]]; then
 		findMissing=$value
+	elif [[ $key == "--enable-advanced-display" ]]; then
+		enable_advanced_display=$value
 	elif [[ $key == "--update" ]]; then
 		mode="update"
 	elif [[ $key == "--help" ]] || [[ $key == "-?" ]] || [[ $key == "-h" ]]; then
@@ -48,7 +54,9 @@ done
 findArgs=${findArgs::-4}	# remove the last instance of ' -or' to make the argument valid for the 'find' command
 
 # clear the screen before we start jumping all over the place and drawing
-tput clear
+if [ $enable_advanced_display == true ]; then
+	tput clear
+fi
 
 if [[ $mode == "create" ]]; then
 	md5Generated=0
@@ -73,33 +81,36 @@ if [[ $mode == "create" ]]; then
 			formatedTime=`printf '%dh:%dm:%ds\n' $((delta/3600)) $((delta%3600/60)) $((delta%60))`
 
 			# clear first line
-			tput cup 0 0
-			echo -e "\033[2K"
+			if [ $enable_advanced_display == true ]; then
+				tput cup 0 0
+				echo -e "\033[2K"
 
-			# Display report
-			tput cup 2 0
-			echo "Report (in progress)"
-			echo "********************"
-			echo "          Directory: $dir"
-			echo "               Mode: $mode"
-			echo "         Start Time: $startTime"
-			echo "           End Time: in progress"
-			echo "           Duration: $formatedTime"
-			echo "    Number of files: $fileCounter"
-			echo ""
-			echo "   md5 generated(g): $md5Generated"
-			echo "      md5 exists(e): $md5Exists"
-			echo "     md5 Skipped(s): $md5Skipped"
-			echo ""
-			echo "  sha1 generated(g): $sha1Generated"
-			echo "     sha1 exists(e): $sha1Exists"
-			echo "    sha1 Skipped(s): $sha1Skipped"
-			echo ""
-			echo "sha256 generated(g): $sha256Generated"
-			echo "   sha256 exists(e): $sha256Exists"
-			echo "  sha256 Skipped(s): $sha256Skipped"
+				# Display report
+				tput cup 2 0
+				echo "Report (in progress)"
+				echo "********************"
+				echo "          Directory: $dir"
+				echo "               Mode: $mode"
+				echo "         Start Time: $startTime"
+				echo "           End Time: in progress"
+				echo "           Duration: $formatedTime"
+				echo "    Number of files: $fileCounter"
+				echo ""
+				echo "   md5 generated(g): $md5Generated"
+				echo "      md5 exists(e): $md5Exists"
+				echo "     md5 Skipped(s): $md5Skipped"
+				echo ""
+				echo "  sha1 generated(g): $sha1Generated"
+				echo "     sha1 exists(e): $sha1Exists"
+				echo "    sha1 Skipped(s): $sha1Skipped"
+				echo ""
+				echo "sha256 generated(g): $sha256Generated"
+				echo "   sha256 exists(e): $sha256Exists"
+				echo "  sha256 Skipped(s): $sha256Skipped"
 
-			tput cup 0 0
+				tput cup 0 0
+			fi
+
 			echo -n "$filename | MD5 ("
 			if [ $enable_md5 == true ]; then
 				if [ -f "$nestedPath".md5 ]; then
@@ -153,8 +164,10 @@ if [[ $mode == "create" ]]; then
 	delta=$((seconds1 - seconds2))
 	formatedTime=`printf '%dh:%dm:%ds\n' $((delta/3600)) $((delta%3600/60)) $((delta%60))`
 
-	tput clear
-	tput cup 2 0
+	if [ $enable_advanced_display == true ]; then
+		tput clear
+		tput cup 2 0
+	fi
 
 	echo "Final Report"
 	echo "************"
