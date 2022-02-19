@@ -221,37 +221,39 @@ elif [[ $mode == "check" ]]; then
 			delta=$((seconds1 - seconds2))
 			formatedTime=`printf '%dh:%dm:%ds\n' $((delta/3600)) $((delta%3600/60)) $((delta%60))`
 
-			# clear first line
-			tput cup 0 0
-			echo -e "\033[2K"
+			if [ $enable_advanced_display == true ]; then
+				# clear first line
+				tput cup 0 0
+				echo -e "\033[2K"
 
-			# Display report
-			tput cup 2 0
-			echo "Report (in progress)"
-			echo "********************"
-			echo "        Directory: $dir"
-			echo "             Mode: $mode"
-			echo "       Start Time: $startTime"
-			echo "         End Time: in progress"
-			echo "         Duration: $formatedTime"
-			echo "  Number of files: $fileCounter"
-			echo ""
-			echo "      md5 Good(✓): $md5Good"
-			echo "       md5 Bad(X): $md5Bad"
-			echo "   md5 Missing(?): $md5Missing"
-			echo "   md5 Skipped(s): $md5Skipped"
-			echo ""
-			echo "     sha1 Good(✓): $sha1Good"
-			echo "      sha1 Bad(X): $sha1Bad"
-			echo "  sha1 Missing(?): $sha1Missing"
-			echo "  sha1 Skipped(s): $sha1Skipped"
-			echo ""
-			echo "   sha256 Good(✓): $sha256Good"
-			echo "    sha256 Bad(X): $sha256Bad"
-			echo "sha256 Missing(?): $sha256Missing"
-			echo "sha256 Skipped(s): $sha256Skipped"
+				# Display report
+				tput cup 2 0
+				echo "Report (in progress)"
+				echo "********************"
+				echo "        Directory: $dir"
+				echo "             Mode: $mode"
+				echo "       Start Time: $startTime"
+				echo "         End Time: in progress"
+				echo "         Duration: $formatedTime"
+				echo "  Number of files: $fileCounter"
+				echo ""
+				echo "      md5 Good(✓): $md5Good"
+				echo "       md5 Bad(X): $md5Bad"
+				echo "   md5 Missing(?): $md5Missing"
+				echo "   md5 Skipped(s): $md5Skipped"
+				echo ""
+				echo "     sha1 Good(✓): $sha1Good"
+				echo "      sha1 Bad(X): $sha1Bad"
+				echo "  sha1 Missing(?): $sha1Missing"
+				echo "  sha1 Skipped(s): $sha1Skipped"
+				echo ""
+				echo "   sha256 Good(✓): $sha256Good"
+				echo "    sha256 Bad(X): $sha256Bad"
+				echo "sha256 Missing(?): $sha256Missing"
+				echo "sha256 Skipped(s): $sha256Skipped"
 
-			tput cup 0 0
+				tput cup 0 0
+			fi
 			echo -n "$nestedPath | "
 			echo -n "MD5 ("
 			if [ $enable_md5 == true ]; then
@@ -349,8 +351,10 @@ elif [[ $mode == "check" ]]; then
 	delta=$((seconds1 - seconds2))
 	formatedTime=`printf '%dh:%dm:%ds\n' $((delta/3600)) $((delta%3600/60)) $((delta%60))`
 
-	tput clear
-	tput cup 0 0
+	if [ $enable_advanced_display == true ]; then
+		tput clear
+		tput cup 0 0
+	fi
 
 	echo ""
 	echo "Final Report"
