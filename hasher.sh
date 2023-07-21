@@ -1,6 +1,6 @@
 #!/bin/bash
-# Copyright Steven Harradine 2022
-HASHER_VERSION=0.3
+# Copyright Steven Harradine 2023
+HASHER_VERSION=0.3.1
 mode=help
 dir="./"
 filetypes_videos=(avi mkv mp4 ts mts m2ts mpg mpeg wmv wv flv webm vob ogv ogg rm asf wtv mov)
@@ -16,6 +16,8 @@ enable_sha256=true
 findMissing=false
 fileCounter=0
 enable_advanced_display=false
+enable_report=false
+report_location=report.txt
 
 ## only if the session is interactive will we use the advanced displays
 tty -s && enable_advanced_display=true
@@ -39,6 +41,10 @@ for arg in "$@"; do
 		findMissing=$value
 	elif [[ $key == "--enable-advanced-display" ]]; then
 		enable_advanced_display=$value
+	elif [[ $key == "--enable-report" ]]; then
+		enable_report=$value
+	elif [[ $key == "--report-location" ]]; then
+		report_location=$value
 	elif [[ $key == "--update" ]]; then
 		mode="update"
 	elif [[ $key == "--help" ]] || [[ $key == "-?" ]] || [[ $key == "-h" ]]; then
@@ -169,26 +175,34 @@ if [[ $mode == "create" ]]; then
 		tput cup 2 0
 	fi
 
-	echo "Final Report"
-	echo "************"
-	echo "          Directory: $dir"
-	echo "               Mode: $mode"
-	echo "         Start Time: $startTime"
-	echo "           End Time: $endTime"
-	echo "           Duration: $formatedTime"
-	echo "    Number of files: $fileCounter"
-	echo ""
-	echo "   md5 generated(g): $md5Generated"
-	echo "      md5 exists(e): $md5Exists"
-	echo "     md5 Skipped(s): $md5Skipped"
-	echo ""
-	echo "  sha1 generated(g): $sha1Generated"
-	echo "     sha1 exists(e): $sha1Exists"
-	echo "    sha1 Skipped(s): $sha1Skipped"
-	echo ""
-	echo "sha256 generated(g): $sha256Generated"
-	echo "   sha256 exists(e): $sha256Exists"
-	echo "  sha256 Skipped(s): $sha256Skipped"
+	report_buffer=""
+
+	report_buffer+="Final Report\n"
+	report_buffer+="************\n"
+	report_buffer+="          Directory: $dir\n"
+	report_buffer+="               Mode: $mode\n"
+	report_buffer+="         Start Time: $startTime\n"
+	report_buffer+="           End Time: $endTime\n"
+	report_buffer+="           Duration: $formatedTime\n"
+	report_buffer+="    Number of files: $fileCounter\n"
+	report_buffer+="\n"
+	report_buffer+="   md5 generated(g): $md5Generated\n"
+	report_buffer+="      md5 exists(e): $md5Exists\n"
+	report_buffer+="     md5 Skipped(s): $md5Skipped\n"
+	report_buffer+="\n"
+	report_buffer+="  sha1 generated(g): $sha1Generated\n"
+	report_buffer+="     sha1 exists(e): $sha1Exists\n"
+	report_buffer+="    sha1 Skipped(s): $sha1Skipped\n"
+	report_buffer+="\n"
+	report_buffer+="sha256 generated(g): $sha256Generated\n"
+	report_buffer+="   sha256 exists(e): $sha256Exists\n"
+	report_buffer+="  sha256 Skipped(s): $sha256Skipped\n"
+
+	echo -e "$report_buffer"
+
+	if [ $enable_report == true ]; then
+		echo -e "$report_buffer\n" >> "$report_location"
+	fi
 elif [[ $mode == "check" ]]; then
 	md5error=false
 	md5Good=0
@@ -356,39 +370,46 @@ elif [[ $mode == "check" ]]; then
 		tput cup 0 0
 	fi
 
-	echo ""
-	echo "Final Report"
-	echo "************"
-	echo "        Directory: $dir"
-	echo "             Mode: $mode"
-	echo "       Start Time: $startTime"
-	echo "         End Time: $endTime"
-	echo "         Duration: $formatedTime"
-	echo "  Number of files: $fileCounter"
-	echo ""
-	echo "      md5 Good(✓): $md5Good"
-	echo "       md5 Bad(X): $md5Bad"
-	echo "   md5 Missing(?): $md5Missing"
-	echo "   md5 Skipped(s): $md5Skipped"
-	echo ""
-	echo "     sha1 Good(✓): $sha1Good"
-	echo "      sha1 Bad(X): $sha1Bad"
-	echo "  sha1 Missing(?): $sha1Missing"
-	echo "  sha1 Skipped(s): $sha1Skipped"
-	echo ""
-	echo "   sha256 Good(✓): $sha256Good"
-	echo "    sha256 Bad(X): $sha256Bad"
-	echo "sha256 Missing(?): $sha256Missing"
-	echo "sha256 Skipped(s): $sha256Skipped"
-	echo ""
+	report_buffer=""
+
+	report_buffer+="Final Report\n"
+	report_buffer+="************\n"
+	report_buffer+="        Directory: $dir\n"
+	report_buffer+="             Mode: $mode\n"
+	report_buffer+="       Start Time: $startTime\n"
+	report_buffer+="         End Time: $endTime\n"
+	report_buffer+="         Duration: $formatedTime\n"
+	report_buffer+="  Number of files: $fileCounter\n"
+	report_buffer+="\n"
+	report_buffer+="      md5 Good(✓): $md5Good\n"
+	report_buffer+="       md5 Bad(X): $md5Bad\n"
+	report_buffer+="   md5 Missing(?): $md5Missing\n"
+	report_buffer+="   md5 Skipped(s): $md5Skipped\n"
+	report_buffer+="\n"
+	report_buffer+="     sha1 Good(✓): $sha1Good\n"
+	report_buffer+="      sha1 Bad(X): $sha1Bad\n"
+	report_buffer+="  sha1 Missing(?): $sha1Missing\n"
+	report_buffer+="  sha1 Skipped(s): $sha1Skipped\n"
+	report_buffer+="\n"
+	report_buffer+="   sha256 Good(✓): $sha256Good\n"
+	report_buffer+="    sha256 Bad(X): $sha256Bad\n"
+	report_buffer+="sha256 Missing(?): $sha256Missing\n"
+	report_buffer+="sha256 Skipped(s): $sha256Skipped\n"
+	report_buffer+="\n"
 
 	bad=$(($md5Bad + $sha1Bad + $sha256Bad + md5Missing + sha1Missing + sha256Missing))
 
 	if [ "$bad" -eq "0" ]; then
-		echo "  ** All good **"
+		report_buffer+="  ** All good **"
 	else
-		echo "  !!! Some errors should investigate !!!"
-		echo -e "$error_log"
+		report_buffer+="  !!! Some errors should investigate !!!\n\n"
+		report_buffer+="$error_log"
+	fi
+
+	echo -e "$report_buffer"
+
+	if [ $enable_report == true ]; then
+		echo -e "$report_buffer\n" >> "$report_location"
 	fi
 elif [[ $mode == "update" ]]; then
 	fullpath=$(readlink -f "${BASH_SOURCE}")
@@ -408,6 +429,8 @@ elif [[ $mode == "help" ]]; then
 	echo "    --enable-sha1={true|false}"
 	echo "    --enable-sha256={true|false}"
 	echo "    --find-missing={true|false}, do not scan the files but just look for missing hashes"
+	echo "    --enable-report={true|false}, write the final report to the --report-location"
+	echo "    --report-location=the location to write the final report when --enable-report flag is set to true"
 	echo "    --update, update this program with the lastest version from git"
 	echo "    --help, -h, -? Will enable this help window"
 	echo ""
