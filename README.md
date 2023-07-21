@@ -16,7 +16,9 @@ curl https://raw.githubusercontent.com/stevenharradine/bashInstaller/master/inst
     --enable-md5={true|false}
     --enable-sha1={true|false}
     --enable-sha256={true|false}
-    --find-missing={true|false}, do not scan the files but just look for missing hashes"
+    --find-missing={true|false}, do not scan the files but just look for missing hashes
+    --enable-report={true|false}, write the final report to the --report-location
+    --report-location=the location to write the final report when --enable-report flag is set to true
     --update, update this program with the lastest version from git
     --help, -h, -? Will enable this help window
 
